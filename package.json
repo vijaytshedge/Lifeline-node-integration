@@ -4,7 +4,8 @@
   "description": "Lifeline Diagnostics",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "netlify deploy --prod"
+    "build": "netlify deploy --prod",
+    "start": "node functions/app.js"
   },
   "author": "",
   "license": "ISC",
