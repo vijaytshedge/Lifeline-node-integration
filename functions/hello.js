@@ -1,19 +1,18 @@
-var express = require('express');
-var app = express();
-var path = require('path');
+
 var nodemailer = require('nodemailer');
+export default async (event, context) => {
 
-app.get('/', function (req, res) {
-	app.use(express.static(path.join(__dirname, '../dist')));
-    res.sendFile(path.join(__dirname, "../dist/index.html"));
-});
+    console.log("==>  " + JSON.stringify(event));
+    console.log("==>  " + JSON.stringify(context));
+    console.log("method:  " + event.httpMethod); 
+    if (event.httpMethod == 'POST') {
+        console.log("method: POST"); 
+    }
+    if (event.httpMethod !== 'POST') {
+        console.log("method: :("); 
+    }
 
-var server = app.listen(5000, function () {
-    console.log("Express App running at http://127.0.0.1:5000/");
-});
-
-app.post('/makeAppointment', function(req, res){
-	var htmlBody = "test";
+    var htmlBody = "test123" + new Date();
 	/* res.send('Success. Register up called');
 	if (customerData.fullName)
 		htmlBody = "<p>Customer Name: " + customerData.fullName + "</p>";
@@ -40,15 +39,17 @@ app.post('/makeAppointment', function(req, res){
 		html: htmlBody
 	};
 
-	console.log(mailOptions);
-
+	
 	transporter.sendMail(mailOptions, function (error, info) {
 		if (error) {
 			console.log(error);
-			res.send('Error. Register up called');
+			return new Response('Error. Register up called');
 		} else {
 			console.log('Email sent: ' + info.response);
-			res.send('Success. Register up called');
+			return new Response('Success. Register up called');
 		}
 	});
-});
+
+    return new Response("Done");
+  };
+  
