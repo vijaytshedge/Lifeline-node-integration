@@ -1,68 +1,35 @@
+import fetch from 'node-fetch';
 
-var nodemailer = require('nodemailer');
-exports.handler = async (event, context) => {
-
-    console.log("==>  " + JSON.stringify(event));
-    console.log("==>  " + JSON.stringify(context));
-    console.log("method:  " + event.httpMethod); 
-    if (event.httpMethod == 'POST') {
-        console.log("method: POST"); 
-    }
-    if (event.httpMethod !== 'POST') {
-        console.log("method: :("); 
-    }
-
-    var htmlBody = event.body;
-	/* res.send('Success. Register up called');
-	if (customerData.fullName)
-		htmlBody = "<p>Customer Name: " + customerData.fullName + "</p>";
-	if (customerData.email)
-		htmlBody += "<p>Customer Email: " + customerData.email + "</p>";
-	if (customerData.mobileNumber)
-		htmlBody += "<p>Customer mobile number: " + customerData.mobileNumber + "</p>";
-	if (customerData.message)
-		htmlBody += "<p>Customer mobile number: " + customerData.mobileNumber + "</p>";
-	*/
-
-	const transporter = nodemailer.createTransport({
-		host: 'smtp.gmail.com',
-		port: 587,
-		auth: {
-		  user: 'vijaytshedge@gmail.com',
-		  pass: 'nwlvhsktdpyguams',
-		},
-	  });
-	var mailOptions = {
-		from: 'vijaytshedge@gmail.com',
-		to: 'vijaytshedge2007@yahoo.co.in',
-		subject: 'Lifeline inquiry',
-		html: htmlBody
-	};
-
-	
-	transporter.sendMail(mailOptions, async function (error, info) {
-		if (error) {
-			console.log(error);
-			return {
-                statusCode: 200,
-                body: JSON.stringify({
-                  message: "Technical error. Please try again."
-                })
-            };
-		} else {
-			console.log('Email sent: ' + info.response);
-			return {
-                statusCode: 200,
-                body: JSON.stringify({
-                  message: "Email sent. Our representive will call you soon."
-                })
-            };
-		}
-	});
-
+exports.handler = async function(event) {
+  if (event.body === null) {
     return {
-        statusCode: 200,
-        body: "Our representive will call you soon."
-    };
-  };
-  
+      statusCode: 400,
+      body: JSON.stringify("Payload required")
+    }
+  }
+  console.log(event.body);
+  const requestBody = JSON.parse(event.body);
+
+  //automatically generated snippet from the email preview
+  //sends a request to an email handler for a subscribed email
+  await fetch(`${process.env.URL}/.netlify/functions/emails/subscribed`, {
+    headers: {
+      "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET
+    },
+    method: "POST",
+    body: JSON.stringify({
+      from: "vijayshedge60@gmail.com",
+      to: "vijaytshedge2007@yahoo.co.in",
+      subject: "Lifeline Inquiry",
+      parameters: {
+        name: requestBody.subscriberName,
+        email: requestBody.subscriberEmail
+      }
+    })
+  })
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify("Subscribe email sent!")
+  }
+};
