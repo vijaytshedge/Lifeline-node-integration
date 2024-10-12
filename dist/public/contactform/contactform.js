@@ -106,7 +106,7 @@ jQuery(document).ready(function ($) {
 
     $.ajax({
       type: "POST",
-      url: "http://localhost:8888/.netlify/functions/hello", //action,
+      url: action,
       data: obj,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
