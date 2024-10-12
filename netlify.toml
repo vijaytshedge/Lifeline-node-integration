@@ -1,6 +1,9 @@
 [build]
     functions = "functions"
 
+[[plugins]]
+  package = "@netlify/plugin-emails"
+
 [[redirects]]
     from="/makeAppointment"
     to="/.netlify/functions/hello"

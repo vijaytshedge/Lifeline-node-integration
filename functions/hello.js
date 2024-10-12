@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
 	};
 
 	
-	transporter.sendMail(mailOptions, function (error, info) {
+	transporter.sendMail(mailOptions, async function (error, info) {
 		if (error) {
 			console.log(error);
 			return {
@@ -62,9 +62,7 @@ exports.handler = async (event, context) => {
 
     return {
         statusCode: 200,
-        body: JSON.stringify({
-          message: "Our representive will call you soon."
-        })
+        body: "Our representive will call you soon."
     };
   };
   
