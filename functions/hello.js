@@ -1,6 +1,6 @@
 
 var nodemailer = require('nodemailer');
-export default async (event, context) => {
+exports.handler = async (event, context) => {
 
     console.log("==>  " + JSON.stringify(event));
     console.log("==>  " + JSON.stringify(context));
@@ -12,7 +12,7 @@ export default async (event, context) => {
         console.log("method: :("); 
     }
 
-    var htmlBody = "test123" + new Date();
+    var htmlBody = event.body;
 	/* res.send('Success. Register up called');
 	if (customerData.fullName)
 		htmlBody = "<p>Customer Name: " + customerData.fullName + "</p>";
@@ -43,13 +43,28 @@ export default async (event, context) => {
 	transporter.sendMail(mailOptions, function (error, info) {
 		if (error) {
 			console.log(error);
-			return new Response('Error. Register up called');
+			return {
+                statusCode: 200,
+                body: JSON.stringify({
+                  message: "Technical error. Please try again."
+                })
+            };
 		} else {
 			console.log('Email sent: ' + info.response);
-			return new Response('Success. Register up called');
+			return {
+                statusCode: 200,
+                body: JSON.stringify({
+                  message: "Email sent. Our representive will call you soon."
+                })
+            };
 		}
 	});
 
-    return new Response("Done");
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: "Our representive will call you soon."
+        })
+    };
   };
   
