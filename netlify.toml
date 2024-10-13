@@ -8,3 +8,6 @@
     from="/makeAppointment"
     to="/.netlify/functions/hello"
     status=200
+
+[functions]
+  node_bundler = "esbuild"
